@@ -14,6 +14,7 @@ LazyData: true
 Suggests:
     testthat (>= 2.1.0),
     covr,
+    curl,
     googledrive
 Imports:
     data.table,
