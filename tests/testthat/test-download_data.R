@@ -45,12 +45,19 @@ test_that("strong data has appropriate values", {
   data <- download_data(file_name, file_format, cloud_platform)
 
   # workout name strong never > 20 or < 4
+  expect_equal(sum(nchar(data[["Workout Name"]])>20), 0)
+  expect_equal(sum(nchar(data[["Workout Name"]])<4), 0)
 
   # excercise name limits
+  expect_equal(sum(nchar(data[["Exercise Name"]])>50), 0)
+  expect_equal(sum(nchar(data[["Exercise Name"]])<5), 0)
 
   # set order < 10
+  expect_equal(sum(data[["Set Order"]]>10), 0)
 
   # weight < 1000
+  expect_equal(sum(data[["Weight"]]>1000), 0)
 
-  # reps < 100
+  # reps < 50
+  expect_equal(sum(data[["Reps"]]>50), 0)
 })
