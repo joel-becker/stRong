@@ -1,4 +1,24 @@
 # list muscles
+muscle_list <- c("Chest",
+                 "Front delt",
+                 "Side delt",
+                 "Tricep",
+
+                 "Traps",
+                 "Mid back",
+                 "Lats",
+                 "Lower back",
+                 "Bicep",
+                 "Rear delt",
+
+                 "Quad",
+                 "Hamstring",
+                 "Calf",
+
+                 "Core",
+
+                 "Aerobic")
+
 muscle_list <- c("Core",
                  "Arms",
                  "Back",
