@@ -41,3 +41,6 @@ vignettes/*.pdf
 
 # downloaded data
 *.csv
+
+# R proj
+*.Rproj
