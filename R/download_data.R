@@ -13,11 +13,15 @@ download_data <- function(
   file_format,
   cloud_platform
 ) {
-  if (cloud_platform == "gdrive") {
-    googledrive::drive_download(file_name, type = file_format, overwrite = TRUE)
+  if (cloud_platform == "googledrive") {
+    googledrive::drive_find()
+
     path <- paste0(file_name, ".", file_format)
+    googledrive::drive_download(path, overwrite = TRUE)
     data <- data.table::fread(path)
   }
+
+  # TODO: other cloud platforms
 
   return(data)
 }
