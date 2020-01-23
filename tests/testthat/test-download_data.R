@@ -28,14 +28,14 @@ test_that("strong data has no missing data at 7 vital columns", {
   missing_data <- download_data(file_name,
                                 file_format,
                                 cloud_platform) %>%
-    filter_at(vars(c("Date",
+    dplyr::filter_at(vars("Date",
                      "Workout Name",
                      "Exercise Name",
                      "Set Order",
                      "Weight",
                      "Weight Unit",
-                     "Reps")),
-              all_vars(is.na(.)))
+                     "Reps"),
+                     all_vars(is.na(.)))
   expect_equal(nrow(data_missing), 0)
 })
 
