@@ -32,9 +32,29 @@ muscle_list <- c("Core",
                  "Legs",
                  "Shoulders")
 
-# function which sets some muscles groups to 1, 0.6, 0.3
-classify_exercise <- function(major,
-                              minor,
-                              subminor) {
-  # TODO: output c(0,1,0.3,0,0,0) style vector corresponding to muscles groups
+# function which outputs some muscle groups to 1, 0.6, 0.3
+classify_exercise <- function(major = c(),
+                              minor = c(),
+                              subminor = c(),
+                              muscle_list) {
+  temp_df <- data.frame(Core = 0,
+                        Arms = 0,
+                        Back = 0,
+                        Chest = 0,
+                        Legs = 0,
+                        Shoulders = 0)
+
+  for (muscle in muscle_list) {
+    if (muscle %in% major) {
+      temp_df[[muscle]] <- 1
+    }
+    if (muscle %in% minor) {
+      temp_df[[muscle]] <- 0.6
+    }
+    if (muscle %in% subminor) {
+      temp_df[[muscle]] <- 0.3
+    }
+  }
+
+  return(temp_df)
 }
