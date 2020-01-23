@@ -39,6 +39,7 @@ wrangle_intensity_metrics <- function(data = data,
 
 # wrangle intensity metrics
 # # merge with exercise compoundness info
+# # aggregate exercises ?
 # # within-workout
 # # # weighted by compoundness
 # # within-workout-exercise
@@ -47,7 +48,7 @@ wrangle_intensity_metrics <- function(data = data,
 
 # wrangle within exercise (over sets)
 data <- data %>%
-  group_by(Date, "Workout Name", "Exercise_Name")
+  group_by(Date, "Workout Name", "Exercise Name")
 
 #' @title merge_exercise_info
 #'
@@ -57,15 +58,47 @@ data <- data %>%
 #' @examples
 #'
 #' @noRd
+merge_exercise_info <- function(data,
+                                exercise_info) {
+  data <- data %>%
+    full_join(exercise_info, by = "Exercise Name")
+
+  return(data)
+}
 
 #' @title wrangle_intensity_within_workout()
 #'
 #' @description Compute intensity metrics (for within- and between-exercise comparisons) within workout
-#' @param data Data from merge_exercise_info()
+#' @param data Data from aggregate_exercises()
 #' @keywords wrangle
 #' @examples
 #'
 #' @noRd
+wrangle_intensity_within_workout <- function() {
+  data <- data %>%
+    dplyr::group_by("Date", "Workout Name") %>%
+
+    # create arbitrary intensity measure
+    dplyr::mutate(intensity = weight * reps * total) %>%
+
+    # intensity wrangling by exercise
+    dplyr::group_by(exercise) %>%
+    dplyr::mutate(
+      # mean intensity of each exercise
+      mean_intensity = mean(intensity),
+      # index intensity to first exercise for each exercise
+      index_intensity = intensity / first(intensity)
+    ) %>%
+    dplyr::ungroup() %>%
+
+    # intensity wrangling by exercise type
+    dplyr::mutate(
+      # normalise intensity
+      normalise_intensity = intensity / mean_intensity
+    )
+
+  return(data)
+}
 
 #' @title wrangle_intensity_within_exercise()
 #'
@@ -75,6 +108,9 @@ data <- data %>%
 #' @examples
 #'
 #' @noRd
+wrangle_intensity_within_exercise <- function() {
+
+}
 
 #' @title wrangle_intensity_within_set()
 #'
@@ -84,3 +120,6 @@ data <- data %>%
 #' @examples
 #'
 #' @noRd
+wrangle_intensity_within_set <- function() {
+
+}

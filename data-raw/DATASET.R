@@ -12,7 +12,7 @@ classify_each_exercise <- function(exercise,
                                    minor = c(),
                                    subminor = c(),
                                    muscle_list) {
-  data <- data.frame(Exercise = exercise,
+  data <- data.frame("Exercise Name" = exercise,
                      Core = 0,
                      Arms = 0,
                      Back = 0,
@@ -78,5 +78,12 @@ classify_all_exercises <- function(muscle_list) {
   return(data)
 }
 
-data <- classify_all_exercises(muscle_list)
-usethis::use_data(data)
+aggregate_exercises <- function(muscle_list) {
+  data <- classify_all_exercises(muscle_list) %>%
+    dplyr::mutate(total = Core + Arms + Back + Chest + Legs + Shoulders)
+
+  return(data)
+}
+
+exercise_info <- aggregate_exercises(muscle_list)
+usethis::use_data(exercise_info)
