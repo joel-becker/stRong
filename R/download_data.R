@@ -1,19 +1,23 @@
-#' @title Download exercise data
+#' @title download_data()
 #'
-#' @description Downloads and returns data from google drive
+#' @description Downloads and returns gym data from cloud platform
 #' @param file_name File name
 #' @param file_format File format
+#' @param platform Cloud platform
 #' @keywords download
 #' @export
 #' @examples
-#' download_exercise_data()
-download_exercise_data <- function(
-  file_name = "exercise_data",
-  file_format = "csv"
+#' download_data()
+download_data <- function(
+  file_name,
+  file_format,
+  cloud_platform
 ) {
-  googledrive::drive_download(file_name, type = file_format, overwrite = TRUE)
-  path <- paste0(file_name, ".", file_format)
-  data <- data.table::fread(path)
+  if (cloud_platform == "gdrive") {
+    googledrive::drive_download(file_name, type = file_format, overwrite = TRUE)
+    path <- paste0(file_name, ".", file_format)
+    data <- data.table::fread(path)
+  }
 
   return(data)
 }
