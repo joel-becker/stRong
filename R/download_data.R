@@ -30,7 +30,9 @@ download_data <- function(
 
     # format column names
     rename_all(tolower) %>%
-    rename("excercise_name" = "exercise name") %>%
+    rename(workout_name = "workout name",
+           excercise_name = "exercise name",
+           set_order = "set order") %>%
 
     # unselect redundant cols
     select(-c("weight unit",

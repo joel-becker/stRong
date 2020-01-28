@@ -108,7 +108,7 @@ wrangle_intensity_within_set <- function(data,
 #' @noRd
 wrangle_intensity_within_exercise <- function() {
   data <- data %>%
-    dplyr::group_by("Date", "Workout Name") %>%
+    dplyr::group_by("date", "workout_name", "exercise_name") %>%
 
     # create arbitrary intensity measure
     dplyr::mutate(intensity = weight * reps * total) %>%
@@ -142,7 +142,7 @@ wrangle_intensity_within_exercise <- function() {
 #' @noRd
 wrangle_intensity_within_workout <- function() {
   data <- data %>%
-    dplyr::group_by("Date", "Workout Name") %>%
+    dplyr::group_by("date", "workout_name") %>%
 
     # create arbitrary intensity measure
     dplyr::mutate(intensity = weight * reps * total) %>%
