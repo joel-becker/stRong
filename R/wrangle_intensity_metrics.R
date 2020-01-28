@@ -46,6 +46,8 @@ wrangle_intensity_metrics <- function(data = data,
 # # # averaging over weight/sets
 # # within-workout-exercise-set
 
+# actually do weightings the other way around so can build up from existing vars
+
 # wrangle within exercise (over sets)
 data <- data %>%
   group_by(Date, "Workout Name", "Exercise Name")
@@ -61,7 +63,75 @@ data <- data %>%
 merge_exercise_info <- function(data,
                                 exercise_info) {
   data <- data %>%
-    full_join(exercise_info, by = "Exercise Name")
+    full_join(exercise_info, by = "exercise_name")
+
+  return(data)
+}
+
+#' @title wrangle_intensity_within_set()
+#'
+#' @description Compute intensity metrics (for within- and between-exercise comparisons) within set
+#' @param data Data from wrangle_intensity_within_exercise()
+#' @keywords wrangle
+#' @examples
+#'
+#' @noRd
+wrangle_intensity_within_set <- function() {
+  data <- data %>%
+    dplyr::group_by("Date", "Workout Name") %>%
+
+    # create arbitrary intensity measure
+    dplyr::mutate(intensity = weight * reps * total) %>%
+
+    # intensity wrangling by exercise
+    dplyr::group_by(exercise) %>%
+    dplyr::mutate(
+      # mean intensity of each exercise
+      mean_intensity = mean(intensity),
+      # index intensity to first exercise for each exercise
+      index_intensity = intensity / first(intensity)
+    ) %>%
+    dplyr::ungroup() %>%
+
+    # intensity wrangling by exercise type
+    dplyr::mutate(
+      # normalise intensity
+      normalise_intensity = intensity / mean_intensity
+    )
+
+  return(data)
+}
+
+#' @title wrangle_intensity_within_exercise()
+#'
+#' @description Compute intensity metrics (for within- and between-exercise comparisons) within exercise
+#' @param data Data from wrangle_intensity_within_workout()
+#' @keywords wrangle
+#' @examples
+#'
+#' @noRd
+wrangle_intensity_within_exercise <- function() {
+  data <- data %>%
+    dplyr::group_by("Date", "Workout Name") %>%
+
+    # create arbitrary intensity measure
+    dplyr::mutate(intensity = weight * reps * total) %>%
+
+    # intensity wrangling by exercise
+    dplyr::group_by(exercise) %>%
+    dplyr::mutate(
+      # mean intensity of each exercise
+      mean_intensity = mean(intensity),
+      # index intensity to first exercise for each exercise
+      index_intensity = intensity / first(intensity)
+    ) %>%
+    dplyr::ungroup() %>%
+
+    # intensity wrangling by exercise type
+    dplyr::mutate(
+      # normalise intensity
+      normalise_intensity = intensity / mean_intensity
+    )
 
   return(data)
 }
@@ -98,28 +168,4 @@ wrangle_intensity_within_workout <- function() {
     )
 
   return(data)
-}
-
-#' @title wrangle_intensity_within_exercise()
-#'
-#' @description Compute intensity metrics (for within- and between-exercise comparisons) within exercise
-#' @param data Data from wrangle_intensity_within_workout()
-#' @keywords wrangle
-#' @examples
-#'
-#' @noRd
-wrangle_intensity_within_exercise <- function() {
-
-}
-
-#' @title wrangle_intensity_within_set()
-#'
-#' @description Compute intensity metrics (for within- and between-exercise comparisons) within set
-#' @param data Data from wrangle_intensity_within_exercise()
-#' @keywords wrangle
-#' @examples
-#'
-#' @noRd
-wrangle_intensity_within_set <- function() {
-
 }
