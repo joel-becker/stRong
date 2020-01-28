@@ -91,7 +91,7 @@ wrangle_intensity_within_set <- function(data,
     dplyr::group_by(exercise_name) %>%
 
     # index intensity to first exercise for each exercise
-    dplyr::mutate(index_intensity = intensity / first(intensity)) %>%
+    dplyr::mutate(index_intensity_set = intensity_set / first(intensity_set)) %>%
 
     dplyr::ungroup()
 
@@ -101,33 +101,27 @@ wrangle_intensity_within_set <- function(data,
 #' @title wrangle_intensity_within_exercise()
 #'
 #' @description Compute intensity metrics (for within- and between-exercise comparisons) within exercise
-#' @param data Data from wrangle_intensity_within_workout()
+#' @param data Data from wrangle_intensity_within_set()
+#' @param sets_exponent Exponent weighting on sets
 #' @keywords wrangle
 #' @examples
 #'
 #' @noRd
-wrangle_intensity_within_exercise <- function() {
+wrangle_intensity_within_exercise <- function(data,
+                                              sets_exponent = 0.6) { # marginal returns decrease, inflate low sets
   data <- data %>%
     dplyr::group_by("date", "workout_name", "exercise_name") %>%
 
     # create arbitrary intensity measure
-    dplyr::mutate(intensity = weight * reps * total) %>%
+    dplyr::mutate(intensity_exercise = mean(intensity_set) * (n(sets)^sets_exponent)) %>%
 
     # intensity wrangling by exercise
-    dplyr::group_by(exercise) %>%
-    dplyr::mutate(
-      # mean intensity of each exercise
-      mean_intensity = mean(intensity),
-      # index intensity to first exercise for each exercise
-      index_intensity = intensity / first(intensity)
-    ) %>%
-    dplyr::ungroup() %>%
+    dplyr::group_by(exercise_name) %>%
 
-    # intensity wrangling by exercise type
-    dplyr::mutate(
-      # normalise intensity
-      normalise_intensity = intensity / mean_intensity
-    )
+    # index intensity to first exercise for each exercise
+    dplyr::mutate(index_intensity_exercise = intensity_exercise / first(intensity_exercise)) %>%
+
+    dplyr::ungroup()
 
   return(data)
 }
@@ -148,7 +142,7 @@ wrangle_intensity_within_workout <- function() {
     dplyr::mutate(intensity = weight * reps * total) %>%
 
     # intensity wrangling by exercise
-    dplyr::group_by(exercise) %>%
+    dplyr::group_by(exercise_name) %>%
     dplyr::mutate(
       # mean intensity of each exercise
       mean_intensity = mean(intensity),
