@@ -32,7 +32,7 @@ classify_each_exercise <- function(exercise,
                                    minor = c(),
                                    subminor = c(),
                                    muscle_list) {
-  data <- data.frame("Exercise Name" = exercise,
+  data <- data.frame("exercise_name" = exercise,
                      Core = 0,
                      Arms = 0,
                      Back = 0,

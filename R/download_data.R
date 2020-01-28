@@ -23,5 +23,10 @@ download_data <- function(
 
   # TODO: other cloud platforms
 
+  # format column names
+  data <- data %>%
+    rename_all(tolower) %>%
+    rename("excercise_name" = "exercise name")
+
   return(data)
 }
