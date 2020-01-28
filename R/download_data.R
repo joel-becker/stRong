@@ -26,10 +26,19 @@ download_data <- function(
   # load data
   data <- data.table::fread(path)
 
-  # format column names
   data <- data %>%
+
+    # format column names
     rename_all(tolower) %>%
-    rename("excercise_name" = "exercise name")
+    rename("excercise_name" = "exercise name") %>%
+
+    # unselect redundant cols
+    select(-c("weight unit",
+              "distance",
+              "distance unit",
+              "seconds",
+              "notes",
+              "workout notes"))
 
   return(data)
 }
