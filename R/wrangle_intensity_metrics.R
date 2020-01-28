@@ -71,33 +71,29 @@ merge_exercise_info <- function(data,
 #' @title wrangle_intensity_within_set()
 #'
 #' @description Compute intensity metrics (for within- and between-exercise comparisons) within set
-#' @param data Data from wrangle_intensity_within_exercise()
+#' @param data Data from merge_exercise_info()
+#' @param weight_exponent Exponent weighting on weight
+#' @param reps_exponent Exponent weighting on reps
 #' @keywords wrangle
 #' @examples
 #'
 #' @noRd
-wrangle_intensity_within_set <- function() {
+wrangle_intensity_within_set <- function(data,
+                                         weight_exponent = 1.2, # marginal returns increase, inflate high weight
+                                         reps_exponent = 0.6) { # marginal returns decrease, inflate low reps
   data <- data %>%
-    dplyr::group_by("Date", "Workout Name") %>%
+    # already at appropriate level so no need to group
 
     # create arbitrary intensity measure
-    dplyr::mutate(intensity = weight * reps * total) %>%
+    dplyr::mutate(intensity_set = (weight^weight_exponent) * (reps^reps_exponent) * total) %>%
 
     # intensity wrangling by exercise
-    dplyr::group_by(exercise) %>%
-    dplyr::mutate(
-      # mean intensity of each exercise
-      mean_intensity = mean(intensity),
-      # index intensity to first exercise for each exercise
-      index_intensity = intensity / first(intensity)
-    ) %>%
-    dplyr::ungroup() %>%
+    dplyr::group_by(exercise_name) %>%
 
-    # intensity wrangling by exercise type
-    dplyr::mutate(
-      # normalise intensity
-      normalise_intensity = intensity / mean_intensity
-    )
+    # index intensity to first exercise for each exercise
+    dplyr::mutate(index_intensity = intensity / first(intensity)) %>%
+
+    dplyr::ungroup()
 
   return(data)
 }
