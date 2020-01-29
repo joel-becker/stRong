@@ -1,52 +1,3 @@
-#' @title wrangle_intensity_metrics()
-#'
-#' @description Compute intensity metrics (for within- and between-exercise comparisons)
-#' @param data Data from download_data()
-#' @param sets_exponent Exponent for weighting number of sets
-#' @keywords wrangle
-#' @export
-#' @examples
-wrangle_intensity_metrics <- function(data = data,
-                                      sets_exponent = 0.8) {
-  data <- data %>%
-
-    # create arbitrary intensity measure
-    dplyr::mutate(intensity = weight * (sets^sets_exponent)) %>%
-
-    # intensity wrangling by exercise
-    dplyr::group_by(exercise) %>%
-    dplyr::mutate(
-      # mean intensity of each exercise
-      mean_intensity = mean(intensity),
-      # index intensity to first exercise for each exercise
-      index_intensity = intensity / first(intensity)
-    ) %>%
-    dplyr::ungroup() %>%
-
-    # intensity wrangling by exercise type
-    dplyr::mutate(
-      # normalise intensity
-      normalise_intensity = intensity / mean_intensity
-    )
-
-  # TODO: upweight intensity to the degree that movement involves many muscle groups
-  # use `dplyr::mutate(weight_intensity = normalise_intensity * compound_factor)` to do so
-  # perhaps same for aerobic exercise (* aerobic_factor?
-
-  return(data)
-}
-
-# wrangle intensity metrics
-# # merge with exercise compoundness info
-# # aggregate exercises ?
-# # within-workout
-# # # weighted by compoundness
-# # within-workout-exercise
-# # # averaging over weight/sets
-# # within-workout-exercise-set
-
-# actually do weightings the other way around so can build up from existing vars
-
 #' @title merge_exercise_info
 #'
 #' @description merge strong data with info about exercises
@@ -74,8 +25,8 @@ merge_exercise_info <- function(data,
 #'
 #' @noRd
 wrangle_intensity_within_set <- function(data,
-                                         weight_exponent = 1.2, # marginal returns increase, inflate high weight
-                                         reps_exponent = 0.8) { # marginal returns decrease, inflate low reps
+                                         weight_exponent = 1.2, # marginal difficulty increase, inflate high weight
+                                         reps_exponent = 0.8) { # marginal difficulty decrease, inflate low reps
   data <- data %>%
     # already at appropriate level so no need to group
 
@@ -103,7 +54,7 @@ wrangle_intensity_within_set <- function(data,
 #'
 #' @noRd
 wrangle_intensity_within_exercise <- function(data,
-                                              sets_exponent = 0.8) { # marginal returns decrease, inflate low sets
+                                              sets_exponent = 0.8) { # marginal difficulty decrease, inflate low sets
   data <- data %>%
     dplyr::group_by("date", "workout_name", "exercise_name") %>%
 
@@ -131,7 +82,7 @@ wrangle_intensity_within_exercise <- function(data,
 #'
 #' @noRd
 wrangle_intensity_within_workout <- function(data,
-                                             exercise_exponent = 0.8) { # marginal returns decrease, inflate low exercises
+                                             exercise_exponent = 0.8) { # marginal difficulty decrease, inflate low exercises
   data <- data %>%
     dplyr::group_by("date", "workout_name") %>%
 
@@ -150,3 +101,42 @@ wrangle_intensity_within_workout <- function(data,
 }
 
 # TODO: wrangle intensity within *WORKOUT TYPE*
+
+#' @title wrangle_intensity_metrics()
+#'
+#' @description Compute intensity metrics (for within- and between-exercise comparisons)
+#' @param data Data from download_data()
+#' @param sets_exponent Exponent for weighting number of sets
+#' @keywords wrangle
+#' @export
+#' @examples
+wrangle_intensity_metrics <- function(data,
+                                      exercise_info,
+                                      weight_exponent = 1.2,
+                                      reps_exponent = 0.8,
+                                      sets_exponent = 0.8,
+                                      exercise_exponent = 0.8) {
+  data <- data %>%
+
+    # merge with exercise info
+    merge_exercise_info(.,
+                        exercise_info) %>%
+
+    # wrangle intensity within-set
+    wrangle_intensity_within_set(.,
+                                 weight_exponent,
+                                 reps_exponent) %>%
+
+    # wrangle intensity within-exercise
+    wrangle_intensity_within_exercise(.,
+                                      sets_exponent) %>%
+
+    # wrangle intensity within-workout
+    wrangle_intensity_within_workout(.,
+                                     exercise_exponent)
+
+  # TODO: factor in aerobic exercise, possibly with some aerobic_factor
+
+  return(data)
+}
+
