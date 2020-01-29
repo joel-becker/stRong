@@ -13,15 +13,34 @@ download_data <- function(
   file_format,
   cloud_platform
 ) {
+  # get data
   if (cloud_platform == "googledrive") {
     googledrive::drive_find()
 
     path <- paste0(file_name, ".", file_format)
     googledrive::drive_download(path, overwrite = TRUE)
-    data <- data.table::fread(path)
   }
 
   # TODO: other cloud platforms
+
+  # load data
+  data <- data.table::fread(path)
+
+  data <- data %>%
+
+    # format column names
+    rename_all(tolower) %>%
+    rename(workout_name = "workout name",
+           excercise_name = "exercise name",
+           set_order = "set order") %>%
+
+    # unselect redundant cols
+    select(-c("weight unit",
+              "distance",
+              "distance unit",
+              "seconds",
+              "notes",
+              "workout notes"))
 
   return(data)
 }
