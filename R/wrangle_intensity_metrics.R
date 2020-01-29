@@ -2,6 +2,7 @@
 #'
 #' @description merge strong data with info about exercises
 #' @param data Data from download_data()
+#' @param exercise_info Lookup table for exercises attached to package
 #' @keywords merge
 #' @examples
 #'
@@ -9,7 +10,8 @@
 merge_exercise_info <- function(data,
                                 exercise_info) {
   data <- data %>%
-    full_join(exercise_info, by = "exercise_name")
+    full_join(exercise_info, by = "exercise_name") %>%
+    arrange(date)
 
   return(data)
 }
@@ -100,13 +102,19 @@ wrangle_intensity_within_workout <- function(data,
   return(data)
 }
 
-# TODO: wrangle intensity within *WORKOUT TYPE*
+# TODO: check that above func is performing the correct within- calculation
+
+# TODO: wrangle intensity within *WORKOUT NAME*
 
 #' @title wrangle_intensity_metrics()
 #'
 #' @description Compute intensity metrics (for within- and between-exercise comparisons)
 #' @param data Data from download_data()
-#' @param sets_exponent Exponent for weighting number of sets
+#' @param exercise_info Lookup table for exercises attached to package
+#' @param weight_exponent Exponent weighting on weight
+#' @param reps_exponent Exponent weighting on reps
+#' @param sets_exponent Exponent weighting on sets
+#' @param exercise_exponent Exponent weighting on exercises
 #' @keywords wrangle
 #' @export
 #' @examples
