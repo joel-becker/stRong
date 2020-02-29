@@ -83,7 +83,28 @@ classify_all_exercises <- function(muscle_list) {
                                 c(),
                                 muscle_list)
   data <- append_classification(data,
+                                "Incline Bench Press (Barbell)",
+                                c("Shoulders",
+                                  "Arms"),
+                                c("Chest"),
+                                c(),
+                                muscle_list)
+  data <- append_classification(data,
+                                "Decline Bench Press (Barbell)",
+                                c("Chest",
+                                  "Arms"),
+                                c("Shoulders"),
+                                c(),
+                                muscle_list)
+  data <- append_classification(data,
                                 "Overhead Press (Barbell)",
+                                c("Shoulders"),
+                                c("Core",
+                                  "Arms"),
+                                c(),
+                                muscle_list)
+  data <- append_classification(data,
+                                "Overhead Press (Dumbbell)",
                                 c("Shoulders"),
                                 c("Core",
                                   "Arms"),
@@ -96,7 +117,31 @@ classify_all_exercises <- function(muscle_list) {
                                 c(),
                                 muscle_list)
   data <- append_classification(data,
+                                "Triceps Dip",
+                                c("Arms"),
+                                c("Chest"),
+                                c(),
+                                muscle_list)
+  data <- append_classification(data,
+                                "Triceps Extension",
+                                c("Arms"),
+                                c(),
+                                c(),
+                                muscle_list)
+  data <- append_classification(data,
+                                "Triceps Extension (Cable)",
+                                c("Arms"),
+                                c(),
+                                c(),
+                                muscle_list)
+  data <- append_classification(data,
                                 "Lateral Raise (Dumbbell)",
+                                c("Shoulders"),
+                                c(),
+                                c(),
+                                muscle_list)
+  data <- append_classification(data,
+                                "Lateral Raise (Cable)",
                                 c("Shoulders"),
                                 c(),
                                 c(),
@@ -109,8 +154,8 @@ classify_all_exercises <- function(muscle_list) {
                                   "Shoulders"),
                                 muscle_list)
   data <- append_classification(data,
-                                "Lateral Raise (Cable)",
-                                c("Shoulders"),
+                                "Chest Fly",
+                                c("Chest"),
                                 c(),
                                 c(),
                                 muscle_list)
@@ -121,7 +166,15 @@ classify_all_exercises <- function(muscle_list) {
                                 c("Back",
                                   "Arms"),
                                 c(),
-                                c("Shoulders"),
+                                c("Shoulders",
+                                  "Core"),
+                                muscle_list)
+  data <- append_classification(data,
+                                "Pull Up",
+                                c("Back"),
+                                c("Shoulders",
+                                  "Arms"),
+                                c("Core"),
                                 muscle_list)
   data <- append_classification(data,
                                 "Bent Over Row - Underhand (Barbell)",
@@ -130,7 +183,19 @@ classify_all_exercises <- function(muscle_list) {
                                 c("Shoulders"),
                                 muscle_list)
   data <- append_classification(data,
+                                "Bent Over Row (Barbell)",
+                                c("Back"),
+                                c("Shoulders"),
+                                c("Arms"),
+                                muscle_list)
+  data <- append_classification(data,
                                 "Preacher Curl (Machine)",
+                                c("Arms"),
+                                c(),
+                                c(),
+                                muscle_list)
+  data <- append_classification(data,
+                                "Preacher Curl (Barbell)",
                                 c("Arms"),
                                 c(),
                                 c(),
@@ -141,6 +206,13 @@ classify_all_exercises <- function(muscle_list) {
                                 c(),
                                 c("Back",
                                   "Core"),
+                                muscle_list)
+  data <- append_classification(data,
+                                "Reverse Fly (Machine)",
+                                c(),
+                                c("Shoulders",
+                                  "Back"),
+                                c(),
                                 muscle_list)
   data <- append_classification(data,
                                 "Bicep Curl (Dumbbell)",
@@ -155,10 +227,28 @@ classify_all_exercises <- function(muscle_list) {
                                 c("Arms"),
                                 muscle_list)
   data <- append_classification(data,
+                                "Lat Pulldown (Single Arm)",
+                                c("Back"),
+                                c(),
+                                c("Arms"),
+                                muscle_list)
+  data <- append_classification(data,
                                 "Seated Row (Cable)",
                                 c("Back"),
                                 c(),
                                 c("Arms"),
+                                muscle_list)
+  data <- append_classification(data,
+                                "Seated Wide-Grip Row (Cable)",
+                                c("Back"),
+                                c(),
+                                c("Arms"),
+                                muscle_list)
+  data <- append_classification(data,
+                                "Back extension",
+                                c("Back"),
+                                c(),
+                                c(),
                                 muscle_list)
 
   # Legs
@@ -176,7 +266,20 @@ classify_all_exercises <- function(muscle_list) {
                                 c(),
                                 muscle_list)
   data <- append_classification(data,
+                                "Sumo Deadlift (Barbell)",
+                                c("Back"),
+                                c("Core",
+                                  "Legs"),
+                                c(),
+                                muscle_list)
+  data <- append_classification(data,
                                 "Seated Calf Raise (Machine)",
+                                c("Legs"),
+                                c(),
+                                c(),
+                                muscle_list)
+  data <- append_classification(data,
+                                "Seated Calf Raise (Plate Loaded)",
                                 c("Legs"),
                                 c(),
                                 c(),
@@ -189,6 +292,12 @@ classify_all_exercises <- function(muscle_list) {
                                 muscle_list)
   data <- append_classification(data,
                                 "Leg Press",
+                                c("Legs"),
+                                c(),
+                                c(),
+                                muscle_list)
+  data <- append_classification(data,
+                                "Leg Extension (Machine)",
                                 c("Legs"),
                                 c(),
                                 c(),
