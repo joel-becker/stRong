@@ -14,7 +14,7 @@
 ########################################################
 
 # load libraries
-packages <- c("dplyr", "ggplot2", "ggpolypath")
+packages <- c("dplyr", "ggplot2", "ggpolypath", "DescTools")
 new.packages <- packages[!(packages %in% installed.packages()[, "Package"])]
 if(length(new.packages)) install.packages(new.packages)
 lapply(packages, library, character.only = TRUE)
@@ -91,23 +91,29 @@ extractCoords <- function(coords, name, transMatrix) {
     return(anatCoord)
 }
 
-####
-#Male Human
-####
+########################################################
+######################### Male #########################
+########################################################
+
 hsMale <- read.table('homo_sapiens.male_coords.tsv', sep='\t', stringsAsFactors=F)
 hgMale_list <- list()
+
 for (i in 1:nrow(hsMale)) {
     df <- extractCoords(hsMale$V2[i], hsMale$V1[i],  hsMale$V3[i])
 
     hgMale_list[[i]] <- extractCoords(hsMale$V2[i], hsMale$V1[i],  hsMale$V3[i])
     hgMale_list[[i]]$id <- gsub(' ', '_', hgMale_list[[i]]$id)
-    if ( (unique(hgMale_list[[i]]$id) == 'leukocyte') & (min(hgMale_list[[i]]$x, na.rm=T)<15) ) {
+    if (
+      (unique(hgMale_list[[i]]$id) == 'leukocyte') &
+      (min(hgMale_list[[i]]$x, na.rm=T)<15)
+    ) {
         hgMale_list[[i]]$x <- hgMale_list[[i]]$x-4.5230265
         hgMale_list[[i]]$y <- hgMale_list[[i]]$y -11.586659
     }
     names(hgMale_list)[i] <-  paste0(hsMale$V1[i],'-', i)
 }
-library(DescTools)
+
+plot.new()
 plot(hgMale_list[['LAYER_OUTLINE-384']]$x, hgMale_list[['LAYER_OUTLINE-384']]$y)
 testis1 <- DrawEllipse(x=59.421902+ -9.6858637, y=168.88368+ -66.040746, radius.x=1, radius.y=2.6421267,  col='red')
 hgMale_list[['testis-1']] <- data.frame(X1 = testis1$x, X2 = testis1$y, id='testis', x = testis1$x, y = testis1$y, group ='testis1', stringsAsFactors = FALSE)
