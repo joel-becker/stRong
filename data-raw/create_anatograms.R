@@ -1,11 +1,28 @@
-# much code adapted from:
-# https://github.com/jespermaag/gganatogram/blob/master/data-raw/createAnatograms.R
+#----------------------------------------------------------------------------------#
+# Creates anatograms
+# Date: 06/27/2020
+# Author: Joel Becker
 
-library(ggplot2)
-library(dplyr)
-library(ggpolypath)
+# Notes:
+#   Much code adapted from:
+#   https://github.com/jespermaag/gganatogram/blob/master/data-raw/createAnatograms.R
+#----------------------------------------------------------------------------------#
 
 
+########################################################
+######################## Set-up ########################
+########################################################
+
+# load libraries
+packages <- c("dplyr", "ggplot2", "ggpolypath")
+new.packages <- packages[!(packages %in% installed.packages()[, "Package"])]
+if(length(new.packages)) install.packages(new.packages)
+lapply(packages, library, character.only = TRUE)
+
+
+########################################################
+#################### List functions ####################
+########################################################
 
 extractCoords <- function(coords, name, transMatrix) {
     c <- strsplit(coords, " ")
